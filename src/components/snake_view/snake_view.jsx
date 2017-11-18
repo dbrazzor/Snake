@@ -33,10 +33,6 @@ class SnakeView extends Component {
 		}
 	}
 
-	componentWillMount() {
-		interval = setInterval(this.stepForward, this.state.speed);
-	}
-
 	componentDidMount() {
 		window.addEventListener('keydown', this.handleKeyDown);
 		this.initNewGame();
@@ -52,8 +48,10 @@ class SnakeView extends Component {
 			snakePosition: { x: 10, y: 10 },
 			snakeTail: null,
 			direction: 'ltr',
-			score: 0
+			score: 0,
+			speed: 50
 		});
+		this.changeSpeed(50);
 		this.addSnakeTail(5);
 	};
 
@@ -61,6 +59,11 @@ class SnakeView extends Component {
 		lastSavedScore = this.state.score;
 		this.setLooseDialogOpenState(true);
 		this.initNewGame();
+	}
+
+	changeSpeed = (speed) => {
+		clearInterval(interval);
+		interval = setInterval(this.stepForward, speed);
 	}
 
 	comparePositions = (a, b) => a.x === b.x && a.y === b.y;
@@ -98,14 +101,19 @@ class SnakeView extends Component {
 
 	handleAppleCollision = () => {
 		const { score } = this.state;
+		let { speed } = this.state;
 		let applePosition = null;
 		do {
 			applePosition = this.getRandomPosition()
 		} while (!applePosition || this.isSnakeInPosition(applePosition));
-
+		if (score % 3 === 0 && speed > 25) {
+			speed -= 1;
+			this.changeSpeed(speed);
+		}
 		this.setState({
 			applePosition,
-			score: score + 1
+			score: score + 1,
+			speed
 		});
 		this.addSnakeTail(5);
 	}
@@ -183,7 +191,7 @@ class SnakeView extends Component {
 	setLooseDialogOpenState = (state) => this.setState({ openLooseDialog: state });
 
 	render() {
-		const { classes, username } = this.props;
+		const { classes } = this.props;
 		const {
 			snakePosition,
 			snakeTail,

@@ -17,10 +17,9 @@ class App extends Component {
 		}
 	}
 
-	changeUsername = value => this.setState({ username: value });
-
 	render() {
 		const { classes } = this.props;
+		const { username } = this.state;
 
 		return (
 			<Router>

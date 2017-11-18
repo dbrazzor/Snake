@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import injectSheet from 'react-jss';
 
@@ -6,14 +8,20 @@ import PersonIcon from 'material-ui-icons/Person';
 
 import styles from './username_input_styles';
 
-const UsernameInput = ({ username, changeUsername, classes }) => (
+import { setUsername as setUsernameAction } from '../../../actions/user_actions';
+
+const UsernameInput = ({ username, setUsername, classes }) => (
 	<div className={classes.container}>
 		<input
 			className={classes.input}
 			type="text"
-			placeholder={username || 'Username'}
+			value={username === null ? 'Username' : username}
+			onBlur={() => {
+				if (!username) setUsername('Username');
+			}}
+			onChange={(e) => setUsername(e.currentTarget.value)}
 		/>
-		<IconContainer classes={classes} />
+	<IconContainer classes={classes} />
 	</div>
 );
 
@@ -23,4 +31,12 @@ const IconContainer = ({ classes }) => (
 	</div>
 );
 
-export default injectSheet(styles)(UsernameInput);
+const mapStateToProps = state => ({
+	username: state.user.username
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+	setUsername: setUsernameAction
+}, dispatch);
+
+export default injectSheet(styles)(connect(mapStateToProps, mapDispatchToProps)(UsernameInput));

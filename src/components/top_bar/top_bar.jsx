@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
 import injectSheet from 'react-jss';
@@ -12,15 +13,10 @@ import styles from './top_bar_styles';
 
 const TopBar = ({
 	location,
-	classes,
-	changeUsername,
-	username
+	classes
 }) => (
 	<div className={classes.container}>
-		<UsernameInput
-			username={username}
-			changeUsername={changeUsername}
-		/>
+		<UsernameInput />
 		<Buttons
 			classes={classes}
 			pathname={location.pathname.toLowerCase()}
@@ -60,4 +56,8 @@ const Buttons = ({ classes, pathname }) => (
 	</div>
 );
 
-export default withRouter(injectSheet(styles)(TopBar));
+const mapStateToProps = state => ({
+	username: state.user.username
+});
+
+export default withRouter(injectSheet(styles)(connect(mapStateToProps)(TopBar)));
