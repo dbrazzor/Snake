@@ -7,7 +7,7 @@ const { card2 } = materialDesignCards;
 
 export default ({
 	container: {
-		height: 80,
+		height: 70,
 		width: '100%',
 		backgroundColor: '#FFF',
 		padding: [0, 50],

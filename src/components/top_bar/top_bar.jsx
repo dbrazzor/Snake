@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import injectSheet from 'react-jss';
 
@@ -10,6 +10,7 @@ import UsernameInput from './smallviews/username_input/username_input';
 import styles from './top_bar_styles';
 
 const TopBar = ({
+	location,
 	classes,
 	changeUsername,
 	username = "Username"
@@ -19,18 +20,21 @@ const TopBar = ({
 			username={username}
 			changeUsername={changeUsername}
 		/>
-		<Buttons classes={classes} />
+		<Buttons
+			classes={classes}
+			pathname={location.pathname.toLowerCase()}
+		/>
 	</div>
 );
 
-const Buttons = ({ classes }) => (
+const Buttons = ({ classes, pathname }) => (
 	<div className={classes.buttonsContainer}>
-		<Link to="/scores">
+		<Link to={pathname === '/scores' ? '/' : '/scores'}>
 			<Button
 				raised
 				color="primary"
 			>
-				{'Voir les scores'}
+				{pathname === '/scores' ? 'Retour au jeu' : 'Voir les scores'}
 			</Button>
 		</Link>
 		<Button
@@ -42,4 +46,4 @@ const Buttons = ({ classes }) => (
 	</div>
 );
 
-export default injectSheet(styles)(TopBar);
+export default withRouter(injectSheet(styles)(TopBar));
