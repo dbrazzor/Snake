@@ -14,6 +14,8 @@ const gameDimensions = { width: 400, height: 400 };
 let interval = null;
 let requestedDirection = null;
 
+let lastSavedScore = 0;
+
 class SnakeView extends Component {
 	constructor(props) {
 		super(props);
@@ -56,6 +58,7 @@ class SnakeView extends Component {
 	};
 
 	handleLoose = () => {
+		lastSavedScore = this.state.score;
 		this.setLooseDialogOpenState(true);
 		this.initNewGame();
 	}
@@ -211,7 +214,7 @@ class SnakeView extends Component {
 				<LooseDialog
 					open={openLooseDialog}
 					setLooseDialogOpenState={this.setLooseDialogOpenState}
-					score={score}
+					score={lastSavedScore}
 				/>
 			</div>
 		);
