@@ -5,6 +5,6 @@ You can try it out [here](https://thomasgrivet.fr). (if not there might be a pro
 
 ----------
 
-Feel free to use the code, mention me if you desire and ask any question, I would be glad to help!
+Feel free to use the code, mention me if you desire and ask any question, I will be glad to help!
 
 Have a nice day 🐍
