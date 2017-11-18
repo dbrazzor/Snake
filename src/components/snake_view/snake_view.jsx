@@ -49,7 +49,8 @@ class SnakeView extends Component {
 		this.setState({
 			snakePosition: { x: 10, y: 10 },
 			snakeTail: null,
-			direction: 'ltr'
+			direction: 'ltr',
+			score: 0
 		});
 		this.addSnakeTail(5);
 	};
