@@ -5,15 +5,16 @@ import injectSheet from 'react-jss';
 
 import Button from 'material-ui/Button';
 
-import UsernameInput from './smallviews/username_input/username_input';
+import UsernameInput from '../smallviews/username_input/username_input';
 
+import GithubIcon from '../../medias/assets/github.svg';
 import styles from './top_bar_styles';
 
 const TopBar = ({
 	location,
 	classes,
 	changeUsername,
-	username = "Username"
+	username
 }) => (
 	<div className={classes.container}>
 		<UsernameInput
@@ -43,6 +44,19 @@ const Buttons = ({ classes, pathname }) => (
 		>
 			{'Modifier les paramètres'}
 		</Button>
+		<a href="https://github.com/dbrazzor/Snake">
+			<Button
+				raised
+				classes={{ root: classes.seeCodeButton }}
+			>
+				{'Voir le code'}
+				<img
+					src={GithubIcon}
+					alt=""
+					className={classes.githubIcon}
+				/>
+			</Button>
+		</a>
 	</div>
 );
 

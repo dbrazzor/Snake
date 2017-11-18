@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { Rect } from 'react-konva';
 
-const Snake = ({
+const Apple = ({
 	x,
 	y,
 	width = 10,
@@ -18,4 +18,4 @@ const Snake = ({
 			/>
 	);
 
-export default Snake;
+export default Apple;

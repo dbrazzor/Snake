@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 
 import injectSheet from 'react-jss';
 
-import {Layer, Rect, Stage } from 'react-konva';
+import {Layer, Stage } from 'react-konva';
 
 import Snake from './smallviews/snake/snake';
+import Apple from './smallviews/apple/apple';
+import LooseDialog from './smallviews/loose_dialog/loose_dialog';
 
 import styles from './snake_view_styles';
 
 const gameDimensions = { width: 400, height: 400 };
+let interval = null;
+let requestedDirection = null;
 
 class SnakeView extends Component {
 	constructor(props) {
@@ -18,48 +22,170 @@ class SnakeView extends Component {
 				x: 0,
 				y: 10
 			},
+			snakeTail: null,
 			direction: 'ltr',
-			speed: 50
+			applePosition: this.getRandomPosition(),
+			score: 0,
+			speed: 50,
+			openLooseDialog: false
 		}
 	}
 
 	componentWillMount() {
-		setInterval(this.stepForward, this.state.speed);
+		interval = setInterval(this.stepForward, this.state.speed);
 	}
 
 	componentDidMount() {
-		window.addEventListener('keydown', (event) => this.handleKeyDown(event.key))
+		window.addEventListener('keydown', this.handleKeyDown);
+		this.initNewGame();
 	}
 
-	handleKeyDown = (key) => {
-		let { direction } = this.state;
-		const oldDirection = direction;
-		switch(key) {
-			case 'ArrowUp': direction = 'dtt';
-			case 'ArrowRight': direction = 'ltr';
-			case 'ArrowDown': direction = 'ttd';
-			case 'ArrowLeft': direction = 'rtl';
+	componentWillUnmount() {
+		clearInterval(interval);
+		window.removeEventListener('keydown', this.handleKeyDown);
+	}
+
+	initNewGame = () => {
+		this.setState({
+			snakePosition: { x: 10, y: 10 },
+			snakeTail: null,
+			direction: 'ltr'
+		});
+		this.addSnakeTail(5);
+	};
+
+	handleLoose = () => {
+		this.setLooseDialogOpenState(true);
+		this.initNewGame();
+	}
+
+	comparePositions = (a, b) => a.x === b.x && a.y === b.y;
+
+	getRandomPosition = () => {
+		const { height, width } = gameDimensions;
+		return {
+			x: Math.floor(Math.random() * (width / 10)) * 10,
+			y: Math.floor(Math.random() * (height / 10)) * 10
 		}
-		if (direction === oldDirection) return null;
+	}
+
+	isSnakeInPosition = (position) => {
+		const { snakePosition, snakeTail } = this.state;
+		if (this.comparePositions(snakePosition, position)) {
+			return true;
+		}
+		if (!snakeTail) return false;
+		if (snakeTail.some(tailPosition => this.comparePositions(tailPosition, position))) {
+			return true;
+		}
+	}
+
+	addSnakeTail = (number) => {
+		const { snakePosition, snakeTail } = this.state;
+		const newTail = snakeTail || [];
+		const position = snakeTail && snakeTail.length >= 1
+											? snakeTail[snakeTail.length - 1]
+											: snakePosition;
+		for (let i = 0; i < number; i++) {
+			newTail.push(position);
+		}
+		this.setState({ snakeTail: newTail });
+	}
+
+	handleAppleCollision = () => {
+		const { score } = this.state;
+		let applePosition = null;
+		do {
+			applePosition = this.getRandomPosition()
+		} while (!applePosition || this.isSnakeInPosition(applePosition));
+
+		this.setState({
+			applePosition,
+			score: score + 1
+		});
+		this.addSnakeTail(5);
+	}
+
+	changeDirection = (oldDirection, direction) => {
+		if (
+			(direction === 'dtt' && oldDirection === 'ttd')
+			|| (direction === 'ttd' && oldDirection === 'dtt')
+			|| (direction === 'ltr' && oldDirection === 'rtl')
+			|| (direction === 'rtl' && oldDirection === 'ltr')
+		) {
+			return false;
+		}
 		this.setState({ direction });
+		requestedDirection = null;
+	}
+
+	handleKeyDown = (event) => {
+		switch(event.key) {
+			case 'ArrowUp': requestedDirection = 'dtt'; break;
+			case 'ArrowRight': requestedDirection = 'ltr'; break;
+			case 'ArrowDown': requestedDirection = 'ttd'; break;
+			case 'ArrowLeft': requestedDirection = 'rtl'; break;
+			default: requestedDirection = 'ltr';
+		}
 	}
 
 	stepForward = () => {
-		const { snake } = this.snake.refs;
-		let { x } = snake.attrs;
-		if (x >= gameDimensions.width) {
-			this.setState({
-				snakePosition: { x: 0, y: 10 }
-			});
-			x = 0;
+		if (requestedDirection) {
+			this.changeDirection(this.state.direction, requestedDirection);
 		}
-		snake.to({ x: x + 10, duration: this.state.speed / 1000 });
+		const {
+			snakePosition,
+			applePosition
+		} = this.state;
+		let { snakeTail } = this.state;
+		const x = snakePosition.x | 0;
+		const y = snakePosition.y | 0;
+		const nextPosition = { x, y };
+		switch (this.state.direction) {
+			case 'dtt': nextPosition.y = y - 10; break;
+			case 'ltr': nextPosition.x = x + 10; break;
+			case 'ttd': nextPosition.y = y + 10; break;
+			case 'rtl': nextPosition.x = x - 10; break;
+			default: nextPosition.x = x + 10;
+		}
+		if (nextPosition.x >= gameDimensions.width) {
+			nextPosition.x = 0;
+		} else if (nextPosition.x < 0) {
+			nextPosition.x = gameDimensions.width - 10;
+		} else if (nextPosition.y >= gameDimensions.height) {
+			nextPosition.y = 0;
+		} else if (nextPosition.y < 0) {
+			nextPosition.y = gameDimensions.width - 10;
+		}
+		if (snakeTail) {
+			if (snakeTail.length > 1) {
+				snakeTail.forEach((tail, index) => snakeTail[index] = snakeTail[index + 1]);
+			}
+			snakeTail[snakeTail.length - 1] = snakePosition;
+		}
+		if (this.comparePositions(nextPosition, applePosition)) {
+			this.handleAppleCollision();
+			snakeTail = this.state.snakeTail;
+		} if (this.isSnakeInPosition(nextPosition)) {
+			this.handleLoose();
+			return null;
+		}
+		this.setState({
+			snakePosition: nextPosition,
+			snakeTail
+		})
 	}
 
+	setLooseDialogOpenState = (state) => this.setState({ openLooseDialog: state });
+
 	render() {
-		const { classes } = this.props;
+		const { classes, username } = this.props;
 		const {
-			snakePosition
+			snakePosition,
+			snakeTail,
+			applePosition,
+			openLooseDialog,
+			score
 		} = this.state;
 		return (
 			<div className={classes.container}>
@@ -67,16 +193,37 @@ class SnakeView extends Component {
 					<Stage width={gameDimensions.width} height={gameDimensions.height}>
         		<Layer>
 							<Snake
-								ref={(snake) => { this.snake = snake }}
-								x={this.state.snakePosition.x}
-								y={this.state.snakePosition.y}
+								key="snake_head"
+								x={snakePosition.x}
+								y={snakePosition.y}
+								color='cyan'
+							/>
+							<Tails snakeTail={snakeTail} />
+							<Apple
+								x={applePosition.x}
+								y={applePosition.y}
+								color="red"
 							/>
       		  </Layer>
     		  </Stage>
 				</div>
+				<LooseDialog
+					open={openLooseDialog}
+					setLooseDialogOpenState={this.setLooseDialogOpenState}
+					score={score}
+				/>
 			</div>
 		);
 	}
 }
+
+const Tails = ({ snakeTail }) =>
+	!snakeTail ? null : snakeTail.map((tail, index) => (
+		<Snake
+			key={`snake_tail_${index}`}
+			x={tail.x}
+			y={tail.y}
+		/>
+	));
 
 export default injectSheet(styles)(SnakeView);

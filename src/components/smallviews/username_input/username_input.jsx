@@ -11,7 +11,7 @@ const UsernameInput = ({ username, changeUsername, classes }) => (
 		<input
 			className={classes.input}
 			type="text"
-			placeholder={username}
+			placeholder={username || 'Username'}
 		/>
 		<IconContainer classes={classes} />
 	</div>

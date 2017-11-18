@@ -1,6 +1,7 @@
 {
   "name": "snake",
   "version": "0.1.0",
+  "homepage": "https://thomasgrivet.fr",
   "private": true,
   "dependencies": {
     "eslint": "^4.11.0",

@@ -2,7 +2,7 @@ import {
 	getBorder,
 	materialDesignCards,
 	flexUtils
-} from '../../../../utils/styles_utils';
+} from '../../../utils/styles_utils';
 
 const { card2 } = materialDesignCards;
 const { center } = flexUtils;
@@ -26,7 +26,10 @@ export default ({
 		border: 'none !important',
 		boxShadow: 'none !important',
 		fontFamily: ['Roboto', 'open sans', 'sans serif'],
-		color: '#7F7F7F'
+		color: '#7F7F7F',
+		'&:invalid': {
+  	  boxShadow: 'none !important'
+		}
 	},
 	iconContainer: {
 		height: '100%',

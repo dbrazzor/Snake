@@ -18,11 +18,19 @@ export default ({
 		...card2
 	},
 	buttonsContainer: {
-		'& > button:first-child': {
+		'& > *:first-child': {
 			margin: 0
 		},
-		'& > button': {
+		'& > *': {
 			marginLeft: 10
 		}
+	},
+	seeCodeButton: {
+		backgroundColor: '#FFF'
+	},
+	githubIcon: {
+		height: 20,
+		width: 20,
+		marginLeft: 10
 	}
 });

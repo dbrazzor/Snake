@@ -1,3 +1,3 @@
 import React from 'react';
 
-export default () => 'scores';
+export default () => "yo, c'est pas codé encore";
