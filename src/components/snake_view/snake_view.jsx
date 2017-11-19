@@ -33,6 +33,11 @@ class SnakeView extends Component {
 		}
 	}
 
+	componentWillMount() {
+		const { sheet } = this.props;
+		sheet.update({ gameDimensions });
+	}
+
 	componentDidMount() {
 		window.addEventListener('keydown', this.handleKeyDown);
 		this.initNewGame();
@@ -201,12 +206,21 @@ class SnakeView extends Component {
 			snakePosition,
 			snakeTail,
 			applePosition,
-			openLooseDialog
+			openLooseDialog,
+			score
 		} = this.state;
 		return (
 			<div className={classes.container}>
 				<div className={classes.gameContainer}>
-					<Stage width={gameDimensions.width} height={gameDimensions.height}>
+					<Score
+						classes={classes}
+						score={score}
+					/>
+					<Stage
+						width={gameDimensions.width}
+						height={gameDimensions.height}
+						className={classes.stage}
+					>
 						<Layer>
 							<Snake
 								key="snake_head"
@@ -242,4 +256,10 @@ const Tails = ({ snakeTail }) =>
 		/>
 	)));
 
-export default injectSheet(styles)(SnakeView);
+const Score = ({ classes, score }) => (
+	<div className={classes.scoreContainer}>
+		{score}
+	</div>
+);
+
+export default injectSheet(styles, { inject: ['classes', 'sheet'] })(SnakeView);

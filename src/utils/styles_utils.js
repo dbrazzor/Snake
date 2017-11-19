@@ -24,3 +24,5 @@ export const flexUtils = {
 		alignItems: 'center'
 	}
 }
+
+export const pixelsToRem = pixels => `${pixels / 16}rem`;

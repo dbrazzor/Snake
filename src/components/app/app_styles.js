@@ -8,7 +8,8 @@ export default ({
 			backgroundColor: 'rgba(0, 0, 0, .1)',
 			'&, & *': {
 				boxSizing: 'border-box'
-			}
+			},
+			fontSize: '16px'
 		},
 		a: {
 			textDecoration: 'none !important'
