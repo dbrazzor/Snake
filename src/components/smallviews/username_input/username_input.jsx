@@ -19,9 +19,9 @@ const UsernameInput = ({ username, setUsername, classes }) => (
 			onBlur={() => {
 				if (!username) setUsername('Username');
 			}}
-			onChange={(e) => setUsername(e.currentTarget.value)}
+			onChange={e => setUsername(e.currentTarget.value)}
 		/>
-	<IconContainer classes={classes} />
+		<IconContainer classes={classes} />
 	</div>
 );
 

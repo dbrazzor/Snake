@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { Rect } from 'react-konva';
 
@@ -9,13 +9,13 @@ const Snake = ({
 	height = 10,
 	color = '#7F7F7F'
 }) => (
-			<Rect
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				fill={color}
-			/>
-	);
+	<Rect
+		x={x}
+		y={y}
+		width={width}
+		height={height}
+		fill={color}
+	/>
+);
 
 export default Snake;

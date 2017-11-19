@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import injectSheet from 'react-jss';
 
 import Dialog, {
-  DialogActions,
-  DialogContent,
+	DialogActions,
+	DialogContent,
 	DialogContentText,
-  DialogTitle,
+	DialogTitle
 } from 'material-ui/Dialog';
 
 import Button from 'material-ui/Button';
@@ -23,7 +23,9 @@ class LooseDialog extends Component {
 	}
 
 	render() {
-		const { classes, open, username, score } = this.props;
+		const {
+			classes, open, username, score
+		} = this.props;
 		return (
 			<Dialog
 				open={open}

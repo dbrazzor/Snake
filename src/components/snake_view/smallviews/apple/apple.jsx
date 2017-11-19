@@ -9,13 +9,13 @@ const Apple = ({
 	height = 10,
 	color = '#7F7F7F'
 }) => (
-			<Rect
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				fill={color}
-			/>
-	);
+	<Rect
+		x={x}
+		y={y}
+		width={width}
+		height={height}
+		fill={color}
+	/>
+);
 
 export default Apple;

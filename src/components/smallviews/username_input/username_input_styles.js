@@ -28,7 +28,7 @@ export default ({
 		fontFamily: ['Roboto', 'open sans', 'sans serif'],
 		color: '#7F7F7F',
 		'&:invalid': {
-  	  boxShadow: 'none !important'
+			boxShadow: 'none !important'
 		}
 	},
 	iconContainer: {

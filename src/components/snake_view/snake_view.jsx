@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import injectSheet from 'react-jss';
 
-import {Layer, Stage } from 'react-konva';
+import { Layer, Stage } from 'react-konva';
 
 import Snake from './smallviews/snake/snake';
 import Apple from './smallviews/apple/apple';
@@ -43,17 +43,15 @@ class SnakeView extends Component {
 		window.removeEventListener('keydown', this.handleKeyDown);
 	}
 
-	initNewGame = () => {
-		this.setState({
-			snakePosition: { x: 10, y: 10 },
-			snakeTail: null,
-			direction: 'ltr',
-			score: 0,
-			speed: 50
-		});
-		this.changeSpeed(50);
-		this.addSnakeTail(5);
-	};
+	setLooseDialogOpenState = state => this.setState({ openLooseDialog: state });
+
+	getRandomPosition = () => {
+		const { height, width } = gameDimensions;
+		return {
+			x: Math.floor(Math.random() * (width / 10)) * 10,
+			y: Math.floor(Math.random() * (height / 10)) * 10
+		}
+	}
 
 	handleLoose = () => {
 		lastSavedScore = this.state.score;
@@ -68,13 +66,18 @@ class SnakeView extends Component {
 
 	comparePositions = (a, b) => a.x === b.x && a.y === b.y;
 
-	getRandomPosition = () => {
-		const { height, width } = gameDimensions;
-		return {
-			x: Math.floor(Math.random() * (width / 10)) * 10,
-			y: Math.floor(Math.random() * (height / 10)) * 10
-		}
-	}
+
+	initNewGame = () => {
+		this.setState({
+			snakePosition: { x: 10, y: 10 },
+			snakeTail: null,
+			direction: 'ltr',
+			score: 0,
+			speed: 50
+		});
+		this.changeSpeed(50);
+		this.addSnakeTail(5);
+	};
 
 	isSnakeInPosition = (position) => {
 		const { snakePosition, snakeTail } = this.state;
@@ -85,15 +88,16 @@ class SnakeView extends Component {
 		if (snakeTail.some(tailPosition => this.comparePositions(tailPosition, position))) {
 			return true;
 		}
+		return false;
 	}
 
 	addSnakeTail = (number) => {
 		const { snakePosition, snakeTail } = this.state;
 		const newTail = snakeTail || [];
 		const position = snakeTail && snakeTail.length >= 1
-											? snakeTail[snakeTail.length - 1]
-											: snakePosition;
-		for (let i = 0; i < number; i++) {
+			? snakeTail[snakeTail.length - 1]
+			: snakePosition;
+		for (let i = 0; i < number; i += 1) {
 			newTail.push(position);
 		}
 		this.setState({ snakeTail: newTail });
@@ -129,15 +133,16 @@ class SnakeView extends Component {
 		}
 		this.setState({ direction });
 		requestedDirection = null;
+		return true;
 	}
 
 	handleKeyDown = (event) => {
-		switch(event.key) {
-			case 'ArrowUp': requestedDirection = 'dtt'; break;
-			case 'ArrowRight': requestedDirection = 'ltr'; break;
-			case 'ArrowDown': requestedDirection = 'ttd'; break;
-			case 'ArrowLeft': requestedDirection = 'rtl'; break;
-			default: requestedDirection = 'ltr';
+		switch (event.key) {
+		case 'ArrowUp': requestedDirection = 'dtt'; break;
+		case 'ArrowRight': requestedDirection = 'ltr'; break;
+		case 'ArrowDown': requestedDirection = 'ttd'; break;
+		case 'ArrowLeft': requestedDirection = 'rtl'; break;
+		default: requestedDirection = 'ltr';
 		}
 	}
 
@@ -149,16 +154,16 @@ class SnakeView extends Component {
 			snakePosition,
 			applePosition
 		} = this.state;
-		let { snakeTail } = this.state;
+		const { snakeTail } = this.state;
 		const x = snakePosition.x | 0;
 		const y = snakePosition.y | 0;
 		const nextPosition = { x, y };
 		switch (this.state.direction) {
-			case 'dtt': nextPosition.y = y - 10; break;
-			case 'ltr': nextPosition.x = x + 10; break;
-			case 'ttd': nextPosition.y = y + 10; break;
-			case 'rtl': nextPosition.x = x - 10; break;
-			default: nextPosition.x = x + 10;
+		case 'dtt': nextPosition.y = y - 10; break;
+		case 'ltr': nextPosition.x = x + 10; break;
+		case 'ttd': nextPosition.y = y + 10; break;
+		case 'rtl': nextPosition.x = x - 10; break;
+		default: nextPosition.x = x + 10;
 		}
 		if (nextPosition.x >= gameDimensions.width) {
 			nextPosition.x = 0;
@@ -171,13 +176,14 @@ class SnakeView extends Component {
 		}
 		if (snakeTail) {
 			if (snakeTail.length > 1) {
-				snakeTail.forEach((tail, index) => snakeTail[index] = snakeTail[index + 1]);
+				snakeTail.forEach((tail, index) => {
+					snakeTail[index] = snakeTail[index + 1];
+				});
 			}
 			snakeTail[snakeTail.length - 1] = snakePosition;
 		}
 		if (this.comparePositions(nextPosition, applePosition)) {
 			this.handleAppleCollision();
-			snakeTail = this.state.snakeTail;
 		} if (this.isSnakeInPosition(nextPosition)) {
 			this.handleLoose();
 			return null;
@@ -185,10 +191,9 @@ class SnakeView extends Component {
 		this.setState({
 			snakePosition: nextPosition,
 			snakeTail
-		})
+		});
+		return true;
 	}
-
-	setLooseDialogOpenState = (state) => this.setState({ openLooseDialog: state });
 
 	render() {
 		const { classes } = this.props;
@@ -196,19 +201,18 @@ class SnakeView extends Component {
 			snakePosition,
 			snakeTail,
 			applePosition,
-			openLooseDialog,
-			score
+			openLooseDialog
 		} = this.state;
 		return (
 			<div className={classes.container}>
 				<div className={classes.gameContainer}>
 					<Stage width={gameDimensions.width} height={gameDimensions.height}>
-        		<Layer>
+						<Layer>
 							<Snake
 								key="snake_head"
 								x={snakePosition.x}
 								y={snakePosition.y}
-								color='cyan'
+								color="cyan"
 							/>
 							<Tails snakeTail={snakeTail} />
 							<Apple
@@ -216,8 +220,8 @@ class SnakeView extends Component {
 								y={applePosition.y}
 								color="red"
 							/>
-      		  </Layer>
-    		  </Stage>
+						</Layer>
+					</Stage>
 				</div>
 				<LooseDialog
 					open={openLooseDialog}
@@ -230,12 +234,12 @@ class SnakeView extends Component {
 }
 
 const Tails = ({ snakeTail }) =>
-	!snakeTail ? null : snakeTail.map((tail, index) => (
+	(!snakeTail ? null : snakeTail.map((tail, index) => (
 		<Snake
 			key={`snake_tail_${index}`}
 			x={tail.x}
 			y={tail.y}
 		/>
-	));
+	)));
 
 export default injectSheet(styles)(SnakeView);
