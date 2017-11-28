@@ -16,6 +16,11 @@ let requestedDirection = null;
 
 let lastSavedScore = 0;
 
+const history = {
+	snakePositions: [],
+	applePositions: []
+};
+
 class SnakeView extends Component {
 	constructor(props) {
 		super(props);
@@ -29,7 +34,8 @@ class SnakeView extends Component {
 			applePosition: this.getRandomPosition(),
 			score: 0,
 			speed: 50,
-			openLooseDialog: false
+			openLooseDialog: false,
+			lastHistory: null
 		}
 	}
 
@@ -60,6 +66,7 @@ class SnakeView extends Component {
 
 	handleLoose = () => {
 		lastSavedScore = this.state.score;
+		this.setState({ lastHistory: JSON.parse(JSON.stringify(history)) });
 		this.setLooseDialogOpenState(true);
 		this.initNewGame();
 	}
@@ -71,7 +78,6 @@ class SnakeView extends Component {
 
 	comparePositions = (a, b) => a.x === b.x && a.y === b.y;
 
-
 	initNewGame = () => {
 		this.setState({
 			snakePosition: { x: 10, y: 10 },
@@ -80,6 +86,8 @@ class SnakeView extends Component {
 			score: 0,
 			speed: 50
 		});
+		history.snakePositions = [];
+		history.applePositions = [];
 		this.changeSpeed(50);
 		this.addSnakeTail(5);
 	};
@@ -124,6 +132,7 @@ class SnakeView extends Component {
 			score: score + 1,
 			speed
 		});
+		history.applePositions.push(applePosition);
 		this.addSnakeTail(5);
 	}
 
@@ -197,6 +206,7 @@ class SnakeView extends Component {
 			snakePosition: nextPosition,
 			snakeTail
 		});
+		history.snakePositions.push(nextPosition);
 		return true;
 	}
 
@@ -207,7 +217,8 @@ class SnakeView extends Component {
 			snakeTail,
 			applePosition,
 			openLooseDialog,
-			score
+			score,
+			lastHistory
 		} = this.state;
 		return (
 			<div className={classes.container}>
@@ -241,6 +252,7 @@ class SnakeView extends Component {
 					open={openLooseDialog}
 					setLooseDialogOpenState={this.setLooseDialogOpenState}
 					score={lastSavedScore}
+					history={lastHistory}
 				/>
 			</div>
 		);
@@ -262,4 +274,4 @@ const Score = ({ classes, score }) => (
 	</div>
 );
 
-export default injectSheet(styles, { inject: ['classes', 'sheet'] })(SnakeView);
+export default injectSheet(styles, { link: true, inject: ['classes', 'sheet'] })(SnakeView);

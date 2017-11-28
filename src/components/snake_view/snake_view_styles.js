@@ -2,7 +2,7 @@ import {
 	flexUtils,
 	getBorder,
 	materialDesignCards,
-	pixelsToRem,
+	pixelsToRem
 } from '../../utils/styles_utils';
 
 const { card2 } = materialDesignCards;
@@ -20,7 +20,7 @@ export default ({
 		width: ({ gameDimensions }) =>
 			(gameDimensions ? gameDimensions.width : 400),
 		position: 'relative',
-	display: 'flex',
+		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'flex-end',
 		backgroundColor: '#FFF',

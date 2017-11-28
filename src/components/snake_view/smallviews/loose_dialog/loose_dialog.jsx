@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
 import injectSheet from 'react-jss';
@@ -16,10 +18,17 @@ import UsernameInput from '../../../smallviews/username_input/username_input';
 
 import styles from './loose_dialog_styles';
 
+import {
+	saveGame as saveGameAction
+} from '../../../../actions/game_actions';
+
 class LooseDialog extends Component {
 	handleRequestClose = () => {
-		const { setLooseDialogOpenState } = this.props;
+		const {
+			setLooseDialogOpenState, saveGame, username, score, history
+		} = this.props;
 		setLooseDialogOpenState(false);
+		saveGame(username, score, history);
 	}
 
 	render() {
@@ -60,4 +69,12 @@ class LooseDialog extends Component {
 	}
 }
 
-export default injectSheet(styles)(LooseDialog);
+const mapStateToProps = state => ({
+	username: state.user.username
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+	saveGame: saveGameAction
+}, dispatch);
+
+export default injectSheet(styles)(connect(mapStateToProps, mapDispatchToProps)(LooseDialog));

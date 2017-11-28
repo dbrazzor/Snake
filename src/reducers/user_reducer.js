@@ -3,7 +3,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-	username: null
+	username: 'Username'
 }
 
 export default (state = initialState, action) => {
