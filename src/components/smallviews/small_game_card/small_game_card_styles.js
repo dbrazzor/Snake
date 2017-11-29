@@ -13,16 +13,17 @@ export default ({
 		height: 80,
 		width: 'calc(100% - 30px)',
 		marginBottom: 10,
+		borderRadius: 3,
 		borderTop: getBorder(1, '#E2E2E2'),
 		position: 'relative',
 		float: 'right',
 		fontStyle: 'normal',
-		padding: [0, 20, 0, 50],
+		padding: [0, 40, 0, 50],
 		display: 'flex',
 		alignItems: 'center',
 		fontFamily: ['Roboto', 'open sans', 'sans serif'],
-		fontSize: pixelsToRem(16),
 		fontWeight: 'bolder',
+		fontSize: pixelsToRem(16),
 		...card2
 	},
 	score: {
@@ -34,8 +35,8 @@ export default ({
 		backgroundColor: '#FFF',
 		border: getBorder(1, '#E2E2E2'),
 		borderRadius: 100,
-		textTransform: 'uppercase',
 		color: 'rgba(0, 0, 0, .4)',
+		textTransform: 'uppercase',
 		boxShadow: '0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.17)',
 		...center
 	},
@@ -47,6 +48,7 @@ export default ({
 	},
 	username: {
 		width: '100%',
-		color: 'rgba(0, 0, 0, .4)'
+		textAlign: 'center',
+		color: 'rgba(0, 0, 0, .35)'
 	}
 });

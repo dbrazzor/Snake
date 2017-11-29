@@ -5,6 +5,7 @@ import injectSheet from 'react-jss';
 
 import { CircularProgress } from 'material-ui/Progress';
 
+import FilterSection from './smallviews/filter_section/filter_section';
 import SmallGameCard from '../../../smallviews/small_game_card/small_game_card';
 
 import styles from './side_panel_styles';
@@ -35,13 +36,19 @@ class SidePanel extends Component {
 			this.setState({ filtered: {} })
 			return false;
 		}
+		let filtered = null;
 		switch (filter) {
-		default: {
-			this.setState({
-				filtered: Object.keys(scoreboard).sort((a, b) => scoreboard[b].date - scoreboard[a].date)
-			});
+		case 'order-by-date':
+			filtered = Object.keys(scoreboard).sort((a, b) => scoreboard[b].date - scoreboard[a].date);
+			break;
+		case 'order-by-score-asc':
+			filtered = Object.keys(scoreboard).sort((a, b) => scoreboard[a].score - scoreboard[b].score);
+			break;
+		default:
+			filtered = Object.keys(scoreboard).sort((a, b) => scoreboard[b].score - scoreboard[a].score);
+			break;
 		}
-		}
+		this.setState({ filtered })
 		return true;
 	}
 
@@ -64,6 +71,12 @@ class SidePanel extends Component {
 					display: this.shouldCenter(hasReceivedScoreboard, scoreboard) ? 'flex' : 'block'
 				}}
 			>
+				<FilterSection
+					filerMode={this.state.filterMode}
+					setFilterMode={(filterMode) => {
+						this.setState({ filterMode });
+					}}
+				/>
 				<Content
 					hasReceivedScoreboard={hasReceivedScoreboard}
 					scoreboard={scoreboard}

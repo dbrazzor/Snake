@@ -14,6 +14,7 @@ export default ({
 		fontFamily: ['Roboto', 'open sans', 'sans serif'],
 		color: '#7F7F7F',
 		fontStyle: 'italic',
-		...center
+		...center,
+		flexWrap: 'wrap'
 	}
 });

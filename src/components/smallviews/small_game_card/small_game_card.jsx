@@ -62,7 +62,10 @@ const Score = ({ score = '?', classes }) => (
 const Username = ({ username, classes }) => (
 	<div className={classes.usernameContainer}>
 		<div className={classes.username}>
-			<Textfit mode="single">
+			<Textfit
+				mode="single"
+				max={24}
+			>
 				{username}
 			</Textfit>
 		</div>
