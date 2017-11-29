@@ -18,7 +18,9 @@ export default ({
 		alignItems: 'center',
 		flexWrap: 'wrap',
 		borderBottom: getBorder(),
-		...card2
+		...card2,
+		zIndex: 1,
+		position: 'relative'
 	},
 	buttonsContainer: {
 		'& > *': {

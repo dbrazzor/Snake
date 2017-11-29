@@ -11,10 +11,13 @@ import Snackbar from 'material-ui/Snackbar';
 import Routes from '../../routes/routes';
 import TopBar from '../top_bar/top_bar';
 
+import { getScoreboard as getScoreboardAction } from '../../actions/game_actions';
+
 import styles from './app_styles';
 
 class App extends Component {
 	componentDidMount() {
+		this.props.getScoreboard();
 	}
 
 	render() {
@@ -52,4 +55,8 @@ const mapStateToProps = state => ({
 	isSaved: state.game.isSaved
 });
 
-export default injectSheet(styles)(connect(mapStateToProps)(App));
+const mapDispatchToProps = dispatch => bindActionCreators({
+	getScoreboard: getScoreboardAction
+}, dispatch);
+
+export default injectSheet(styles)(connect(mapStateToProps, mapDispatchToProps)(App));

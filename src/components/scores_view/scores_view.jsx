@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { CircularProgress } from 'material-ui/Progress';
 
-import { getScoreboard as getScoreboardAction } from '../../actions/game_actions';
 
 class ScoresView extends Component {
-	componentDidMount() {
-		this.props.getScoreboard();
-	}
-
 	render() {
 		const { hasReceivedScoreboard, scoreboard } = this.props;
 		if (hasReceivedScoreboard === null) {
@@ -27,8 +21,4 @@ const mapStateToProps = state => ({
 	scoreboard: state.game.scoreboard
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-	getScoreboard: getScoreboardAction
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ScoresView);
+export default connect(mapStateToProps)(ScoresView);

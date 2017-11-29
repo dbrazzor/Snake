@@ -7,6 +7,7 @@ import { Layer, Stage } from 'react-konva';
 import Snake from './smallviews/snake/snake';
 import Apple from './smallviews/apple/apple';
 import LooseDialog from './smallviews/loose_dialog/loose_dialog';
+import SidePanel from './smallviews/side_panel/side_panel';
 
 import styles from './snake_view_styles';
 
@@ -222,31 +223,34 @@ class SnakeView extends Component {
 		} = this.state;
 		return (
 			<div className={classes.container}>
-				<div className={classes.gameContainer}>
-					<Score
-						classes={classes}
-						score={score}
-					/>
-					<Stage
-						width={gameDimensions.width}
-						height={gameDimensions.height}
-						className={classes.stage}
-					>
-						<Layer>
-							<Snake
-								key="snake_head"
-								x={snakePosition.x}
-								y={snakePosition.y}
-								color="cyan"
-							/>
-							<Tails snakeTail={snakeTail} />
-							<Apple
-								x={applePosition.x}
-								y={applePosition.y}
-								color="red"
-							/>
-						</Layer>
-					</Stage>
+				<SidePanel />
+				<div className={classes.contentContainer}>
+					<div className={classes.gameContainer}>
+						<Score
+							classes={classes}
+							score={score}
+						/>
+						<Stage
+							width={gameDimensions.width}
+							height={gameDimensions.height}
+							className={classes.stage}
+						>
+							<Layer>
+								<Snake
+									key="snake_head"
+									x={snakePosition.x}
+									y={snakePosition.y}
+									color="cyan"
+								/>
+								<Tails snakeTail={snakeTail} />
+								<Apple
+									x={applePosition.x}
+									y={applePosition.y}
+									color="red"
+								/>
+							</Layer>
+						</Stage>
+					</div>
 				</div>
 				<LooseDialog
 					open={openLooseDialog}

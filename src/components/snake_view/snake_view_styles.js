@@ -12,6 +12,13 @@ export default ({
 	container: {
 		height: 'calc(100vh - 70px)',
 		width: '100%',
+		'& > *': {
+			float: 'left'
+		}
+	},
+	contentContainer: {
+		height: '100%',
+		width: 'calc(100% - 300px)',
 		...center
 	},
 	gameContainer: {
