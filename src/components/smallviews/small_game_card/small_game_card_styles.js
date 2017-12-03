@@ -15,6 +15,7 @@ export default ({
 		marginBottom: 10,
 		borderRadius: 3,
 		borderTop: getBorder(1, '#E2E2E2'),
+		backgroundColor: '#FFF',
 		position: 'relative',
 		float: 'right',
 		fontStyle: 'normal',
@@ -32,10 +33,13 @@ export default ({
 		position: 'absolute',
 		top: 25 / 2,
 		left: -30,
-		backgroundColor: '#FFF',
-		border: getBorder(1, '#E2E2E2'),
+		backgroundColor: ({ highlighted }) =>
+			(highlighted ? '#E53935' : '#FFF'),
+		border: ({ highlighted }) =>
+			(highlighted ? 'none' : '1px solid lightgray'),
 		borderRadius: 100,
-		color: 'rgba(0, 0, 0, .4)',
+		color: ({ highlighted }) =>
+			(highlighted ? 'rgba(255, 255, 255, .85)' : 'rgba(0, 0, 0, .4)'),
 		textTransform: 'uppercase',
 		boxShadow: '0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.17)',
 		...center

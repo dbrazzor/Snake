@@ -15,7 +15,7 @@ class SidePanel extends Component {
 		super(props);
 		this.state = {
 			filtered: null,
-			filterMode: 'sort-by-date'
+			filterMode: 'order-by-score-desc'
 		}
 	}
 
@@ -63,7 +63,7 @@ class SidePanel extends Component {
 
 	render() {
 		const { classes, hasReceivedScoreboard, scoreboard } = this.props;
-		const { filtered } = this.state;
+		const { filtered, filterMode } = this.state;
 		return (
 			<div
 				className={classes.container}
@@ -73,31 +73,35 @@ class SidePanel extends Component {
 			>
 				<FilterSection
 					filerMode={this.state.filterMode}
-					setFilterMode={(filterMode) => {
-						this.setState({ filterMode });
+					setFilterMode={(newFilterMode) => {
+						this.setState({ filterMode: newFilterMode });
 					}}
 				/>
 				<Content
 					hasReceivedScoreboard={hasReceivedScoreboard}
 					scoreboard={scoreboard}
 					filtered={filtered}
+					filterMode={filterMode}
 				/>
 			</div>
 		);
 	}
 }
 
-const Content = ({ hasReceivedScoreboard, filtered, scoreboard }) => {
+const Content = ({
+	hasReceivedScoreboard, filtered, scoreboard, filterMode
+}) => {
 	if (!hasReceivedScoreboard) {
 		return <CircularProgress />
 	}
 	if (hasReceivedScoreboard && (!scoreboard || Object.keys(scoreboard).length < 1)) {
 		return "Il n'y a pas de scores disponibles !"
 	}
-	return filtered.map(gameId => (
+	return filtered.map((gameId, index) => (
 		<SmallGameCard
 			smallGame={scoreboard[gameId]}
 			key={`small_game_${gameId}`}
+			highlighted={(!filterMode || filterMode === 'order-by-score-desc') && index === 0}
 		/>
 	));
 }

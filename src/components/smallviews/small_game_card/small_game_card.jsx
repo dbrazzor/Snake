@@ -17,7 +17,7 @@ class SmallGameCard extends Component {
 	}
 
 	render() {
-		const { smallGame, classes } = this.props;
+		const { smallGame, classes, highlighted } = this.props;
 		return (
 			<div className={classes.container}>
 				<Content
