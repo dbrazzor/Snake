@@ -1,14 +1,16 @@
 import React from 'react';
 
 import {
-	Route
+	Switch,
+	Route,
+	Redirect
 } from 'react-router-dom';
 
 import SnakeView from '../components/snake_view/snake_view';
 import ScoresView from '../components/scores_view/scores_view';
 
 const Routes = () => (
-	<div id="routes-container">
+	<Switch>
 		<Route
 			exact
 			path="/"
@@ -18,7 +20,11 @@ const Routes = () => (
 			path="/scores"
 			component={ScoresView}
 		/>
-	</div>
+		<Redirect
+			from="*"
+			to="/"
+		/>
+	</Switch>
 );
 
 export default Routes;

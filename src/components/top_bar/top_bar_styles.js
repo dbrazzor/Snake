@@ -24,16 +24,26 @@ export default ({
 	},
 	buttonsContainer: {
 		'& > *': {
-			marginLeft: 10
+			marginLeft: 20
+		}
+	},
+	button: {
+		height: 45,
+		width: 45,
+		'& svg, & img': {
+			height: 22,
+			width: 22
 		}
 	},
 	seeCodeButton: {
 		backgroundColor: '#FFF'
 	},
 	githubIcon: {
-		height: 20,
-		width: 20,
-		marginLeft: 10
+		height: '25px !important',
+		width: '25px !important'
+	},
+	tooltip: {
+		fontSize: 20
 	},
 	'@media (max-width: 950px)': {
 		container: {

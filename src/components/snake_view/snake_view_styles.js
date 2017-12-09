@@ -18,7 +18,7 @@ export default ({
 	},
 	contentContainer: {
 		height: '100%',
-		width: 'calc(100% - 300px)',
+		width: '100%',
 		...center
 	},
 	gameContainer: {

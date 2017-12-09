@@ -7,11 +7,12 @@ import { Layer, Stage } from 'react-konva';
 import Snake from './smallviews/snake/snake';
 import Apple from './smallviews/apple/apple';
 import LooseDialog from './smallviews/loose_dialog/loose_dialog';
-import SidePanel from './smallviews/side_panel/side_panel';
+import passProps from '../smallviews/pass_props';
 
 import styles from './snake_view_styles';
 
 const gameDimensions = { width: 400, height: 400 };
+
 let interval = null;
 let requestedDirection = null;
 
@@ -38,11 +39,6 @@ class SnakeView extends Component {
 			openLooseDialog: false,
 			lastHistory: null
 		}
-	}
-
-	componentWillMount() {
-		const { sheet } = this.props;
-		sheet.update({ gameDimensions });
 	}
 
 	componentDidMount() {
@@ -223,7 +219,6 @@ class SnakeView extends Component {
 		} = this.state;
 		return (
 			<div className={classes.container}>
-				<SidePanel />
 				<div className={classes.contentContainer}>
 					<div className={classes.gameContainer}>
 						<Score
@@ -278,4 +273,4 @@ const Score = ({ classes, score }) => (
 	</div>
 );
 
-export default injectSheet(styles, { link: true, inject: ['classes', 'sheet'] })(SnakeView);
+export default passProps({ gameDimensions })(injectSheet(styles)(SnakeView));

@@ -2,6 +2,7 @@ import { firebaseDb, firebaseSdk } from '../firebase';
 
 import {
 	SAVE_GAME,
+	SAVE_GAME_SUCCESS,
 	GET_SCOREBOARD_STARTED,
 	GET_SCOREBOARD_RECEIVED_DATA
 } from './types';
@@ -18,6 +19,11 @@ export const saveGame = (username = 'Username', score, gameData) => (dispatch) =
 		score,
 		gameData,
 		date
+	}).then(() => {
+		dispatch({
+			type: SAVE_GAME_SUCCESS,
+			gameId: key
+		});
 	});
 }
 

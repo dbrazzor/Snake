@@ -3,11 +3,15 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
 import injectSheet from 'react-jss';
+import classnames from 'classnames';
 
 import Button from 'material-ui/Button';
+import GamepadIcon from 'material-ui-icons/Gamepad';
 
 import UsernameInput from '../smallviews/username_input/username_input';
 
+// Credits goes to Doug C. Hardester (@r3volution11) for the Trophy icon.
+import TrophyIcon from '../../medias/assets/trophy.svg';
 import GithubIcon from '../../medias/assets/github.svg';
 import styles from './top_bar_styles';
 
@@ -28,28 +32,31 @@ const Buttons = ({ classes, pathname }) => (
 	<div className={classes.buttonsContainer}>
 		<Link to={pathname === '/scores' ? '/' : '/scores'}>
 			<Button
-				raised
+				fab
 				color="primary"
+				classes={{
+					root: classes.button
+				}}
 			>
-				{pathname === '/scores' ? 'Retour au jeu' : 'Voir les scores'}
+				{pathname === '/scores'
+					? <GamepadIcon color="#FFF" />
+					: <img src={TrophyIcon} alt="See scoreboard" />}
 			</Button>
 		</Link>
-		<Button
-			raised
-			color="accent"
-		>
-			{'Modifier les paramètres'}
-		</Button>
 		<a href="https://github.com/dbrazzor/Snake">
 			<Button
-				raised
-				classes={{ root: classes.seeCodeButton }}
+				fab
+				classes={{
+					root: classnames(
+						classes.button,
+						classes.seeCodeButton
+					)
+				}}
 			>
-				{'Voir le code'}
 				<img
-					src={GithubIcon}
-					alt=""
 					className={classes.githubIcon}
+					src={GithubIcon}
+					alt="See code"
 				/>
 			</Button>
 		</a>
