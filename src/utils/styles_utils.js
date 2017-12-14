@@ -25,4 +25,10 @@ export const flexUtils = {
 	}
 }
 
+export const createBackground = (size = 'cover') => ({
+	backgroundSize: size,
+	backgroundRepeat: 'no-repeat',
+	backgroundPosition: 'center'
+});
+
 export const pixelsToRem = pixels => `${pixels / 16}rem`;

@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { JssProvider } from 'react-jss';
 import injectSheet from 'react-jss';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import blue from 'material-ui/colors/blue';
 
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
@@ -18,13 +20,19 @@ import { getScoreboard as getScoreboardAction } from '../../actions/game_actions
 
 import styles from './app_styles';
 
+const theme = createMuiTheme({
+	palette: {
+		primary: blue
+	}
+});
+
 class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			saveSnackbar: {
 				open: false,
-				isSaved: false
+				saveState: 'not-saved'
 			},
 			userPlayedSnackbar: {
 				open: false,
@@ -38,21 +46,35 @@ class App extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.checkSaveState(nextProps.isSaved);
+		this.checkSaveState(nextProps);
 		this.checkUserPlayed(nextProps.scoreboard);
 	}
 
-	checkSaveState = (isSaved) => {
-		if (isSaved !== this.props.isSaved) {
-			if (isSaved || isSaved === null) {
-				this.setState({
-					saveSnackbar: {
-						open: true,
-						isSaved
-					}
-				});
-			}
+	checkSaveState = (newProps) => {
+		const { isSaved } = newProps;
+		const { saveSnackbar, saveSnackbar: { saveState } } = this.state;
+		const oldScoreboard = this.props.scoreboard;
+		const { scoreboard } = newProps;
+		let newSaveState = null;
+		switch (isSaved) {
+		case null: newSaveState = 'saving'; break;
+		case false: newSaveState = 'not-saved'; break;
+		default: newSaveState = isSaved;
 		}
+		if (saveState === newSaveState && scoreboard === oldScoreboard) {
+			return null;
+		}
+		if (isSaved && !scoreboard[newSaveState]) {
+			newSaveState = 'verifying';
+		} else if (isSaved && scoreboard[newSaveState]) {
+			newSaveState = 'saved';
+		}
+		saveSnackbar.saveState = newSaveState;
+		if (newSaveState !== 'not-saved') {
+			saveSnackbar.open = true;
+		}
+		this.setState({ saveSnackbar });
+		return true;
 	}
 
 	checkUserPlayed = (scoreboard) => {
@@ -61,8 +83,12 @@ class App extends Component {
 		if (scoreboard !== oldScoreboard) {
 			const scoreboardKeys = Object.keys(scoreboard);
 			if (scoreboardKeys.length > Object.keys(oldScoreboard).length) {
-				const sortedScoreboard = scoreboardKeys.sort((a, b) => a.date - b.date);
-				const lastScoreId = sortedScoreboard[1];
+				let lastScoreId = null;
+				if (scoreboardKeys.length === 1) lastScoreId = scoreboardKeys[0];
+				else {
+					const sortedScoreboard = scoreboardKeys.sort((a, b) => a.date - b.date);
+					lastScoreId = sortedScoreboard[1];
+				}
 				const lastScore = scoreboard[lastScoreId];
 				if (this.checkInGamePlayed(lastScoreId)) return false;
 				this.setState({
@@ -91,9 +117,9 @@ class App extends Component {
 	}
 
 	closeUserPlayedSnackbar = () => {
-		const { userPlayedSnakbar } = this.state;
+		const { userPlayedSnackbar } = this.state;
 		this.setState({
-			userPlayedSnackbar: Object.assign({}, userPlayedSnakbar, { open: false })
+			userPlayedSnackbar: Object.assign({}, userPlayedSnackbar, { open: false })
 		})
 	}
 
@@ -102,25 +128,29 @@ class App extends Component {
 		const { saveSnackbar, userPlayedSnackbar } = this.state;
 		return (
 			<Router>
-				<JssProvider classNamePrefix="Snake-">
-					<div className={classes.root}>
-						<TopBar />
-						<Routes />
-						<SaveSnackbar
-							open={saveSnackbar.open}
-							isSaved={saveSnackbar.isSaved}
-							closeSnackbar={this.closeSaveSnackbar}
-							classes={classes}
-						/>
-						<UserPlayedSnackbar
-							open={userPlayedSnackbar.open}
-							user={userPlayedSnackbar.user}
-							score={userPlayedSnackbar.score}
-							closeSnackbar={this.closeUserPlayedSnackbar}
-							classes={classes}
-						/>
-					</div>
-				</JssProvider>
+				<MuiThemeProvider theme={theme}>
+					<JssProvider classNamePrefix="Snake-">
+						<div className={classes.root}>
+							<TopBar />
+							<div className={classes.content}>
+								<Routes />
+							</div>
+							<SaveSnackbar
+								open={saveSnackbar.open}
+								state={saveSnackbar.saveState}
+								closeSnackbar={this.closeSaveSnackbar}
+								classes={classes}
+							/>
+							<UserPlayedSnackbar
+								open={userPlayedSnackbar.open}
+								user={userPlayedSnackbar.user}
+								score={userPlayedSnackbar.score}
+								closeSnackbar={this.closeUserPlayedSnackbar}
+								classes={classes}
+							/>
+						</div>
+					</JssProvider>
+				</MuiThemeProvider>
 			</Router>
 		);
 	}
@@ -128,40 +158,52 @@ class App extends Component {
 
 const SaveSnackbar = ({
 	open,
-	isSaved,
+	state,
 	closeSnackbar,
 	classes
-}) => (
-	<Snackbar
-		anchorOrigin={{
-			vertical: 'bottom',
-			horizontal: 'right'
-		}}
-		open={open}
-		autoHideDuration={4000}
-		onRequestClose={closeSnackbar}
-		message={
-			isSaved
-				? <SaveDone />
-				: <SaveInProgress />
-		}
-		action={isSaved && [
-			<IconButton
-				key="save_snackbar_done_icon"
-				color="inherit"
-				className={classes.snackbarIconButton}
-				onClick={closeSnackbar}
-			>
-				<DoneIcon />
-			</IconButton>
-		]}
-		key="save_state_snackbar"
-	/>
-);
+}) => {
+	let message = null;
+	switch (state) {
+	case 'saving':
+		message = <SaveInProgress />
+		break;
+	case 'saved':
+		message = <SaveDone />
+		break;
+	default:
+		message = <VerificationInProgress />
+		break;
+	}
+	return (
+		<Snackbar
+			anchorOrigin={{
+				vertical: 'bottom',
+				horizontal: 'right'
+			}}
+			open={open}
+			autoHideDuration={4000}
+			onRequestClose={closeSnackbar}
+			message={message}
+			action={state === 'saved' && [
+				<IconButton
+					key="save_snackbar_done_icon"
+					color="inherit"
+					className={classes.snackbarIconButton}
+					onClick={closeSnackbar}
+				>
+					<DoneIcon />
+				</IconButton>
+			]}
+			key="save_state_snackbar"
+		/>
+	);
+};
 
 const SaveInProgress = () => 'Sauvegarde en cours...';
 
 const SaveDone = () => 'Score sauvegardé !';
+
+const VerificationInProgress = () => 'Vérification en cours...';
 
 const UserPlayedSnackbar = ({
 	open,
@@ -176,7 +218,7 @@ const UserPlayedSnackbar = ({
 			horizontal: 'left'
 		}}
 		open={open}
-		autoHideDuration={4000}
+		autoHideDuration={5000}
 		onRequestClose={closeSnackbar}
 		message={
 			<span>

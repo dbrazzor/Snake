@@ -10,7 +10,7 @@ const { center } = flexUtils;
 
 export default ({
 	container: {
-		height: 'calc(100vh - 70px)',
+		height: '100%',
 		width: '100%',
 		'& > *': {
 			float: 'left'

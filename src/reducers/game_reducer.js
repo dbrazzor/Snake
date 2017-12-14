@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
 		const newGamesPlayed = state.gamesPlayed;
 		newGamesPlayed.push(action.gameId);
 		return Object.assign({}, state, {
-			isSaved: true,
+			isSaved: action.gameId,
 			gamesPlayed: newGamesPlayed
 		})
 	}
