@@ -39,7 +39,7 @@ const Buttons = ({ classes, pathname }) => (
 				}}
 			>
 				{pathname === '/scores'
-					? <GamepadIcon color="#FFF" />
+					? <GamepadIcon style={{ fill: '#FFF' }} />
 					: <img src={TrophyIcon} alt="See scoreboard" />}
 			</Button>
 		</Link>

@@ -7,9 +7,10 @@ import { MenuList, MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
 import Search from 'material-ui-icons/Search';
 import KeyboardArrowUp from 'material-ui-icons/KeyboardArrowUp';
-import KeyboardArrowDown from 'material-ui-icons/KeyboardArrowDown';
 
 import TrophyIcon from '../../../medias/assets/trophy_grey.svg';
+
+import Filter from './smallviews/filter/filter';
 
 import styles from './side_panel_styles';
 
@@ -19,6 +20,7 @@ const SidePanel = ({ setUsername, classes }) => (
 			setUsername={setUsername}
 			classes={classes}
 		/>
+		<Filters classes={classes} />
 	</div>
 );
 
@@ -26,7 +28,7 @@ const UsernameSection = ({ setUsername, classes }) => (
 	<div className={classes.usernameSectionContainer}>
 		<div className={classes.usernameInputContainer}>
 			<div className={classes.searchIconContainer}>
-				<Search color="#7F7F7F" />
+				<Search style={{ fill: '#7F7F7F' }} />
 			</div>
 			<input
 				type="text"
@@ -38,28 +40,11 @@ const UsernameSection = ({ setUsername, classes }) => (
 );
 
 const Filters = ({ setFilter, classes }) => (
-	<MenuList>
-		<MenuItem className={classes.menuItem}>
-			<ListItemIcon className={classes.menuIcon}>
-				<img src={TrophyIcon} alt="Meilleurs scores" />
-			</ListItemIcon>
-			<ListItemText
-				classes={{ text: classes.menuText }}
-				inset
-				primary="Meilleurs scores"
-			/>
-		</MenuItem>
-		<MenuItem className={classes.menuItem}>
-			<ListItemIcon className={classes.menuIcon}>
-				<KeyboardArrowUp />
-			</ListItemIcon>
-			<ListItemText
-				classes={{ text: classes.menuText }}
-				inset
-				primary="Scores par ordre croissant"
-			/>
-		</MenuItem>
-	</MenuList>
+	<div className={classes.filtersContainer}>
+		<Filter label="Filtrer par date" />
+		<Filter label="Filtrer par nom" />
+		<Filter label="Filtrer par score" />
+	</div>
 );
 
 const mapStateToProps = state => ({

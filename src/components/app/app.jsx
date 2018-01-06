@@ -128,29 +128,27 @@ class App extends Component {
 		const { saveSnackbar, userPlayedSnackbar } = this.state;
 		return (
 			<Router>
-				<MuiThemeProvider theme={theme}>
-					<JssProvider classNamePrefix="Snake-">
-						<div className={classes.root}>
-							<TopBar />
-							<div className={classes.content}>
-								<Routes />
-							</div>
-							<SaveSnackbar
-								open={saveSnackbar.open}
-								state={saveSnackbar.saveState}
-								closeSnackbar={this.closeSaveSnackbar}
-								classes={classes}
-							/>
-							<UserPlayedSnackbar
-								open={userPlayedSnackbar.open}
-								user={userPlayedSnackbar.user}
-								score={userPlayedSnackbar.score}
-								closeSnackbar={this.closeUserPlayedSnackbar}
-								classes={classes}
-							/>
+				<JssProvider classNamePrefix="Snake-">
+					<MuiThemeProvider theme={theme}>
+						<TopBar />
+						<div className={classes.content}>
+							<Routes />
 						</div>
-					</JssProvider>
-				</MuiThemeProvider>
+						<SaveSnackbar
+							open={saveSnackbar.open}
+							state={saveSnackbar.saveState}
+							closeSnackbar={this.closeSaveSnackbar}
+							classes={classes}
+						/>
+						<UserPlayedSnackbar
+							open={userPlayedSnackbar.open}
+							user={userPlayedSnackbar.user}
+							score={userPlayedSnackbar.score}
+							closeSnackbar={this.closeUserPlayedSnackbar}
+							classes={classes}
+						/>
+					</MuiThemeProvider>
+				</JssProvider>
 			</Router>
 		);
 	}
@@ -182,7 +180,7 @@ const SaveSnackbar = ({
 			}}
 			open={open}
 			autoHideDuration={4000}
-			onRequestClose={closeSnackbar}
+			onClose={closeSnackbar}
 			message={message}
 			action={state === 'saved' && [
 				<IconButton
@@ -219,7 +217,7 @@ const UserPlayedSnackbar = ({
 		}}
 		open={open}
 		autoHideDuration={5000}
-		onRequestClose={closeSnackbar}
+		onxClose={closeSnackbar}
 		message={
 			<span>
 				<b>

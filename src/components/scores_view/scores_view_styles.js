@@ -16,7 +16,7 @@ export default ({
 	},
 	scoresContainer: {
 		height: '100%',
-		width: 'calc(100% - 300px)',
+		width: 'calc(100% - 250px)',
 		overflow: 'auto',
 		padding: 20,
 		flexWrap: 'wrap',

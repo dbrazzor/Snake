@@ -8,7 +8,7 @@ const { center } = flexUtils;
 export default theme => ({
 	container: {
 		height: '100%',
-		width: 300,
+		width: 250,
 		backgroundColor: '#FFF',
 		borderRight: getBorder(),
 		boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
@@ -22,7 +22,7 @@ export default theme => ({
 	},
 	usernameInputContainer: {
 		height: 40,
-		width: 250,
+		width: 220,
 		borderRadius: 3,
 		border: getBorder(),
 		overflow: 'hidden',
@@ -31,9 +31,9 @@ export default theme => ({
 		},
 		'& > input': {
 			height: '100%',
-			width: '200px',
+			width: 170,
 			border: 'none',
-			padding: [0, 20],
+			padding: [0, 10],
 			color: '#7F7F7F',
 			fontFamily: ['Roboto', 'open sans', 'sans serif']
 		}
@@ -51,6 +51,10 @@ export default theme => ({
 			}
 		}
 	},
-	menuText: {},
-	menuIcon: {}
+	filtersContainer: {
+		padding: [20, 10],
+		'& > div:last-child': {
+			marginBottom: 0
+		}
+	}
 });

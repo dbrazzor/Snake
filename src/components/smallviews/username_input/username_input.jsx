@@ -27,7 +27,7 @@ const UsernameInput = ({ username, setUsername, classes }) => (
 
 const IconContainer = ({ classes }) => (
 	<div className={classes.iconContainer}>
-		<PersonIcon color="#7F7F7F" />
+		<PersonIcon style={{ fill: '#7F7F7F' }} />
 	</div>
 );
 

@@ -15,9 +15,12 @@ class ScoresView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			scoreboard: this.props.scoreboard,
-			searchSettings: {
-				username: null
+			filteredScoreboard: null,
+			searchUsername: null,
+			filters: {
+				date: false,
+				username: false,
+				score: false
 			}
 		}
 	}
@@ -35,9 +38,7 @@ class ScoresView extends Component {
 	}
 
 	setUsername = (username) => {
-		const { searchSettings } = this.state;
-		searchSettings.username = username;
-		this.setState({ searchSettings });
+		this.setState({ searchUsername: username });
 		this.filterScoreboard();
 	}
 
@@ -45,12 +46,12 @@ class ScoresView extends Component {
 		if (!scoreboard || Object.keys(scoreboard).length < 1) {
 			return null;
 		}
-		const { searchSettings: { username } } = this.state;
+		const { searchUsername } = this.state;
 		let filteredKeys = null;
 		let newScoreboard = scoreboard;
-		if (username) {
+		if (searchUsername) {
 			filteredKeys = Object.keys(scoreboard).filter(id =>
-				scoreboard[id].username.toLowerCase().includes(username.toLowerCase()));
+				scoreboard[id].username.toLowerCase().includes(searchUsername.toLowerCase()));
 		}
 		if (filteredKeys) {
 			newScoreboard = [];
