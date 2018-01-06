@@ -31,12 +31,32 @@ export default theme => ({
 	scoreContainer: {
 		height: 'calc(100% - 50px)',
 		backgroundColor: '#FFF',
+		transform: `translateY(${35 / 3}px)`,
+		willChange: 'transform',
+		transition: 'transform .3s',
 		fontSize: 50,
 		fontWeight: 'bolder',
 		...center
 	},
+	scoreContainerTranslated: {
+		transform: 'translateY(0)'
+	},
 	actionsContainer: {
-		height: 50,
-		width: '100%'
+		height: 'auto',
+		width: '100%',
+		padding: [0, 15],
+		marginBottom: 15,
+		display: 'flex',
+		transform: 'translateY(40px)',
+		willChange: 'transform',
+		justifyContent: 'space-between',
+		transition: 'transform .3s',
+		alignItems: 'center',
+		'& > svg:hover': {
+			cursor: 'pointer'
+		}
+	},
+	actionsContainerTranslated: {
+		transform: 'translateY(0)'
 	}
 });

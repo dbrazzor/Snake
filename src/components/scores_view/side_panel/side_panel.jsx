@@ -79,7 +79,7 @@ const ResultsNumber = ({ number, classes }) => (
 			{number}
 		</b>
 		<span>
-			{'Résultats'}
+			{'Résultat(s)'}
 		</span>
 	</div>
 );
