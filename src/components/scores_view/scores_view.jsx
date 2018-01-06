@@ -18,7 +18,7 @@ class ScoresView extends Component {
 			filteredScoreboard: null,
 			searchUsername: null,
 			filters: {
-				date: false,
+				date: true,
 				username: false,
 				score: false
 			}
@@ -39,24 +39,56 @@ class ScoresView extends Component {
 
 	setUsername = (username) => {
 		this.setState({ searchUsername: username });
-		this.filterScoreboard();
+		this.filterScoreboard(undefined, undefined, username);
 	}
 
-	filterScoreboard = (scoreboard = this.props.scoreboard) => {
+	setFilter = (filter) => {
+		const filters = Object.assign({}, this.state.filters, filter);
+		this.setState({ filters });
+		this.filterScoreboard(undefined, filters);
+	}
+
+	filterScoreboard = (
+		scoreboard = this.props.scoreboard,
+		filters = this.state.filters,
+		searchUsername = this.state.searchUsername
+	) => {
 		if (!scoreboard || Object.keys(scoreboard).length < 1) {
 			return null;
 		}
-		const { searchUsername } = this.state;
 		let filteredKeys = null;
 		let newScoreboard = scoreboard;
+		const scoreboardKeys = Object.keys(scoreboard);
 		if (searchUsername) {
-			filteredKeys = Object.keys(scoreboard).filter(id =>
+			filteredKeys = scoreboardKeys.filter(id =>
 				scoreboard[id].username.toLowerCase().includes(searchUsername.toLowerCase()));
 		}
+		Object.keys(filters).forEach((key) => {
+			const shouldFilter = filters[key];
+			if (!shouldFilter) return false;
+			switch (key) {
+			case 'date':
+				filteredKeys = (filteredKeys || scoreboardKeys)
+					.sort((a, b) => scoreboard[a].date - scoreboard[b].date);
+				break;
+			case 'username':
+				filteredKeys = (filteredKeys || scoreboardKeys).sort((a, b) => {
+					const sa = scoreboard[a];
+					const sb = scoreboard[b];
+					if (sa.username < sb.username) return -1;
+					if (sa.username > sb.username) return 1;
+					return 0;
+				});
+				break;
+			default: filteredKeys = (filteredKeys || scoreboardKeys)
+				.sort((a, b) => scoreboard[a].score - scoreboard[b].score);
+			}
+			return true;
+		})
 		if (filteredKeys) {
-			newScoreboard = [];
-			filteredKeys.forEach((scoreId) => {
-				newScoreboard[scoreId] = scoreboard[scoreId];
+			newScoreboard = {};
+			filteredKeys.forEach((scoreId, index) => {
+				newScoreboard[scoreId] = Object.assign({}, scoreboard[scoreId], { index })
 			});
 		}
 		this.setState({ filteredScoreboard: newScoreboard });
@@ -69,7 +101,7 @@ class ScoresView extends Component {
 			scoreboard,
 			classes
 		} = this.props;
-		const { filteredScoreboard } = this.state;
+		const { filteredScoreboard, filters } = this.state;
 		if (hasReceivedScoreboard === null) {
 			return <Loading classes={classes} />
 		} else if (hasReceivedScoreboard && !scoreboard) {
@@ -77,7 +109,12 @@ class ScoresView extends Component {
 		}
 		return (
 			<Fragment>
-				<SidePanel setUsername={this.setUsername} />
+				<SidePanel
+					setUsername={this.setUsername}
+					filters={filters}
+					setFilter={this.setFilter}
+					resultsNumber={Object.keys(filteredScoreboard || {}).length}
+				/>
 				<div className={classes.scoresContainer}>
 					<Scores
 						filteredScoreboard={filteredScoreboard}
@@ -112,13 +149,14 @@ const Scores = ({ filteredScoreboard, classes }) => {
 	if (!filteredScoreboard || Object.keys(filteredScoreboard).length < 1) {
 		return <NoScore classes={classes} />
 	}
-	return Object.keys(filteredScoreboard).map(scoreId => (
-		<ScoreCard
-			id={scoreId}
-			smallGame={filteredScoreboard[scoreId]}
-			key={`small_score_card_${scoreId}`}
-		/>
-	));
+	return Object.keys(filteredScoreboard)
+		.sort((a, b) => filteredScoreboard[b].index - filteredScoreboard[a].index).map(scoreId => (
+			<ScoreCard
+				id={scoreId}
+				smallGame={filteredScoreboard[scoreId]}
+				key={`small_score_card_${scoreId}`}
+			/>
+		));
 }
 
 const mapStateToProps = state => ({

@@ -53,8 +53,20 @@ export default theme => ({
 	},
 	filtersContainer: {
 		padding: [20, 10],
+		borderBottom: getBorder(),
 		'& > div:last-child': {
 			marginBottom: 0
+		}
+	},
+	resultsNumberContainer: {
+		height: 60,
+		width: '100%',
+		borderBottom: getBorder(),
+		color: '#7F7F7F',
+		fontFamily: ['Roboto', 'open sans', 'sans serif'],
+		...center,
+		'& > b': {
+			marginRight: 10
 		}
 	}
 });

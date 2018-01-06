@@ -14,13 +14,27 @@ import Filter from './smallviews/filter/filter';
 
 import styles from './side_panel_styles';
 
-const SidePanel = ({ setUsername, classes }) => (
+const SidePanel = ({
+	setUsername,
+	filters,
+	setFilter,
+	resultsNumber,
+	classes
+}) => (
 	<div className={classes.container}>
 		<UsernameSection
 			setUsername={setUsername}
 			classes={classes}
 		/>
-		<Filters classes={classes} />
+		<Filters
+			filters={filters}
+			setFilter={setFilter}
+			classes={classes}
+		/>
+		<ResultsNumber
+			number={resultsNumber}
+			classes={classes}
+		/>
 	</div>
 );
 
@@ -39,11 +53,34 @@ const UsernameSection = ({ setUsername, classes }) => (
 	</div>
 );
 
-const Filters = ({ setFilter, classes }) => (
+const Filters = ({ filters, setFilter, classes }) => (
 	<div className={classes.filtersContainer}>
-		<Filter label="Filtrer par date" />
-		<Filter label="Filtrer par nom" />
-		<Filter label="Filtrer par score" />
+		<Filter
+			label="Filtrer par date"
+			checked={filters.date}
+			onClick={() => setFilter({ date: !filters.date })}
+		/>
+		<Filter
+			label="Filtrer par nom"
+			checked={filters.username}
+			onClick={() => setFilter({ username: !filters.username })}
+		/>
+		<Filter
+			label="Filtrer par score"
+			checked={filters.score}
+			onClick={() => setFilter({ score: !filters.score })}
+		/>
+	</div>
+);
+
+const ResultsNumber = ({ number, classes }) => (
+	<div className={classes.resultsNumberContainer}>
+		<b>
+			{number}
+		</b>
+		<span>
+			{'Résultats'}
+		</span>
 	</div>
 );
 
