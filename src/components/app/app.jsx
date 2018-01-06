@@ -217,7 +217,7 @@ const UserPlayedSnackbar = ({
 		}}
 		open={open}
 		autoHideDuration={5000}
-		onxClose={closeSnackbar}
+		onClose={closeSnackbar}
 		message={
 			<span>
 				<b>
