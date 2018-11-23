@@ -41,6 +41,7 @@ class App extends Component {
 			}
 		}
 	}
+
 	componentDidMount() {
 		this.props.getScoreboard();
 	}
@@ -87,7 +88,7 @@ class App extends Component {
 				if (scoreboardKeys.length === 1) lastScoreId = scoreboardKeys[0];
 				else {
 					const sortedScoreboard = scoreboardKeys.sort((a, b) => a.date - b.date);
-					lastScoreId = sortedScoreboard[1];
+					lastScoreId = sortedScoreboard[scoreboardKeys.length - 1];
 				}
 				const lastScore = scoreboard[lastScoreId];
 				if (this.checkInGamePlayed(lastScoreId)) return false;

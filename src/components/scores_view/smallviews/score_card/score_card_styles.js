@@ -29,7 +29,6 @@ export default theme => ({
 		height: 15
 	},
 	scoreContainer: {
-		height: 'calc(100% - 50px)',
 		backgroundColor: '#FFF',
 		transform: `translateY(${35 / 3}px)`,
 		willChange: 'transform',

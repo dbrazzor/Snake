@@ -13,6 +13,7 @@ export const saveGame = (username = 'Username', score, gameData) => (dispatch) =
 	});
 	const { key } = firebaseDb.ref().push();
 	const date = firebaseSdk.database.ServerValue.TIMESTAMP;
+	console.log(key);
 	firebaseDb.ref(`/games/${key}`).set({
 		id: key,
 		username,

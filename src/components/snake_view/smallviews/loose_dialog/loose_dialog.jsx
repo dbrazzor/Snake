@@ -38,7 +38,7 @@ class LooseDialog extends Component {
 		return (
 			<Dialog
 				open={open}
-				onRequestClose={this.handleRequestClose}
+				onClose={this.handleRequestClose}
 			>
 				<DialogTitle>
 					{'Votre score : '}<b>{score}</b>
